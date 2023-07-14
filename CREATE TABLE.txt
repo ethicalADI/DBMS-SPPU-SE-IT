@@ -1,0 +1,81 @@
+/*
+BY:ADITYA KUMAR  
+Topic: CREATE TABLE
+*/
+mysql> create table employee(Empid int,Name varchar(20),Age int,Gender 
+varchar(10),City varchar (20),DOJ date,Salary int);
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> create table Department (Did int,DName varchar(20));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create table Project (Pid int,PName varchar(20),Location varchar(20));
+Query OK, 0 rows affected (0.03 sec)
+
+
+mysql> desc employee;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| Empid  | int         | YES  |     | NULL    |       |
+| Name   | varchar(20) | YES  |     | NULL    |       |
+| Age    | int         | YES  |     | NULL    |       |
+| Gender | varchar(20) | YES  |     | NULL    |       |
+| City   | varchar(20) | YES  |     | NULL    |       |
+| DOJ    | date        | YES  |     | NULL    |       |
+| Salary | int         | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> desc department;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| Did   | int         | YES  |     | NULL    |       |
+| DName | varchar(20) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> desc project;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| Pid     | int         | YES  |     | NULL    |       |
+| PName   | varchar(20) | YES  |     | NULL    |       |
+| Address | varchar(20) | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select*from employee;
++-------+---------+------+--------+---------+------------+--------+
+| Empid | Name    | Age  | Gender | City    | DOJ        | Salary |
++-------+---------+------+--------+---------+------------+--------+
+|     1 | Disha   |   26 | Female | Varansi | 2012-04-26 |  57000 |
+|     2 | Akash   |   27 | Male   | Agra    | 2011-05-27 |  63000 |
+|     3 | Dhiresh |   25 | Male   | Pune    | 2012-06-03 |  74000 |
+|     4 | Roshni  |   22 | Female | Indore  | 2011-07-14 |  61000 |
+|     5 | Aditya  |   31 | Male   | Mumbai  | 2012-08-10 |  67000 |
++-------+---------+------+--------+---------+------------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select*from  department;
++------+-----------+
+| Did  | DName     |
++------+-----------+
+|    1 | Marketing |
+|    2 | Designing |
+|    3 | Computing |
+|    4 | Executive |
++------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> select*from  project;
++------+-----------+---------+
+| Pid  | PName     | Address |
++------+-----------+---------+
+|    1 | Marketing | Varansi |
+|    2 | Designing | Pune    |
+|    3 | Executive | Mumbai  |
+|    4 | Admin     | Solapur |
++------+-----------+---------+
+4 rows in set (0.00 sec)
