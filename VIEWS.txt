@@ -1,0 +1,71 @@
+/*
+BY:ADITYA KUMAR  
+Topic: VIEWS
+*/
+
+
+CREATE TABLE Orders (
+  OrderID INT PRIMARY KEY,
+  OrderDate DATE,
+  CustomerID INT,
+  CustomerName varchar(50),
+  TotalAmount DECIMAL(10, 2)
+);
+
+CREATE TABLE OrderItems (
+  ItemID INT PRIMARY KEY,
+  OrderID INT,
+  ProductName VARCHAR(100),
+  Quantity INT,
+  Price DECIMAL(10, 2),
+  FOREIGN KEY (OrderID) REFERENCES Orders(OrderID)
+);
+
+
+
+INSERT INTO Orders (OrderID, OrderDate, CustomerID,CustomerName, TotalAmount)
+VALUES (1, '2023-01-01', 101,'ADITYA', 150.00),
+       (2, '2023-02-15', 102,'AKASH', 200.00),
+       (3, '2023-03-10', 103, 'SHUBHAM',100.00),
+       (4, '2023-04-05', 104, 'ASHOK',250.00),
+       (5, '2023-05-20', 105, 'PRIYA',180.00);
+INSERT INTO OrderItems (ItemID, OrderID, ProductName, Quantity, Price)
+VALUES (1, 1, 'Product A', 2, 50.00),
+       (2, 1, 'Product B', 1, 30.00),
+       (3, 2, 'Product C', 3, 40.00),
+       (4, 3, 'Product A', 1, 50.00),
+       (5, 4, 'Product D', 2, 80.00),
+       (6, 4, 'Product E', 1, 70.00),
+       (7, 5, 'Product B', 2, 30.00),
+       (8, 5, 'Product D', 1, 50.00),
+       (9, 5, 'Product F', 2, 40.00);
+create view v1 as
+SELECT o.OrderID, o.OrderDate, o.CustomerID, o.CustomerName, o.TotalAmount, i.ProductName, i.Quantity, i.Price
+FROM Orders o
+JOIN OrderItems i ON o.OrderID = i.OrderID;
+
+create view v2 as
+SELECT OrderID, SUM(Price * Quantity) AS OrderTotalAmount
+FROM OrderItems
+GROUP BY OrderID
+ORDER BY OrderID;
+
+
+create view v3 as
+SELECT ProductName,sum(Price) as p
+FROM OrderItems 
+GROUP BY ProductName
+ORDER BY ProductName;
+
+
+create view v4 as
+SELECT o.OrderID, o.OrderDate, o.CustomerName, i.ProductName, i.Quantity, i.Price
+FROM Orders o
+JOIN OrderItems i ON o.OrderID = i.OrderID
+WHERE o.CustomerName = 'ADITYA';
+
+create view v5 as
+SELECT *
+FROM OrderItems 
+where price in (select max(price) from OrderItems);
+
