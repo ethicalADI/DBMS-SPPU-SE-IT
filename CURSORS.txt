@@ -1,0 +1,140 @@
+/*
+BY:ADITYA KUMAR  
+Topic: CURSORS
+Problem Statement :
+Write a PL/SQL block to implement all types of Cursors.
+*/
+
+
+CREATE TABLE Employee (
+    Empid INT PRIMARY KEY,
+    Ename VARCHAR(50),
+    Contactno VARCHAR(10),
+    DOB DATE,
+    DOJ DATE,
+    Salary INT ,
+    Did INT
+    
+);
+
+
+
+-- Insert records into Employee table
+INSERT INTO Employee (Empid, Ename, Contactno, DOB, DOJ, Salary,Did)
+VALUES (1, 'John Doe', 1234567890, '1990-01-01', '2020-01-01', 25000,1),
+       (2, 'Jane Smith', 9876543210, '1995-02-15', '2021-03-15', 40000,2),
+       (3, 'Mike Johnson', 5555555555, '1988-07-10', '2019-06-01', 45000,3),
+       (4, 'Emily Williams', 9998887777, '1992-11-20', '2022-04-01', 50000,4),
+       (5, 'David Brown', 1112223333, '1997-04-05', '2023-01-15', 55000,5);
+
+
+mysql> select *from employee;
++-------+----------------+------------+------------+------------+----------+------+
+| Empid | Ename          | Contactno  | DOB        | DOJ        | Salary   | Did  |
++-------+----------------+------------+------------+------------+----------+------+
+|     1 | John Doe       | 1234567890 | 1990-01-01 | 2020-01-01 | 25000.00 |    1 |
+|     2 | Jane Smith     | 9876543210 | 1995-02-15 | 2021-03-15 | 40000.00 |    2 |
+|     3 | Mike Johnson   | 5555555555 | 1988-07-10 | 2019-06-01 | 45000.00 |    3 |
+|     4 | Emily Williams | 9998887777 | 1992-11-20 | 2022-04-01 | 50000.00 |    4 |
+|     5 | David Brown    | 1112223333 | 1997-04-05 | 2023-01-15 | 55000.00 |    5 |
++-------+----------------+------------+------------+------------+----------+------+
+5 rows in set (0.00 sec)
+
+
+mysql> delimiter $$
+mysql> drop procedure if exists empcursor $$
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create procedure empcursor()
+    ->      begin
+    ->      declare id int;
+    ->      declare sal int;
+    ->      declare flag int default 0;
+    ->      declare c1 cursor for select empid, salary from employee;
+    ->      declare continue handler for not found set flag=1;
+    ->      open c1;
+    ->      fetch c1 into id, sal;
+    ->      select id, sal;
+    ->      close c1;
+    ->      end$$
+Query OK, 0 rows affected (0.01 sec)
+
+
+mysql>  call empcursor()$$
++------+-------+
+| id   | sal   |
++------+-------+
+|    1 | 25000 |
++------+-------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql>  delimiter $$
+mysql>  drop procedure if exists empcursor $$
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>  create procedure empcursor()
+    ->      begin
+    ->      declare id int;
+    ->      declare sal int;
+    ->      declare flag int default 0;
+    ->      declare c1 cursor for select empid, salary from employee;
+    ->      declare continue handler for not found set flag=1;
+    ->      open c1;
+    ->      emp_loop :  loop
+    ->      Fetch c1 into id,sal;
+    ->      If flag = 1 then
+    ->      Leave emp_loop;
+    ->      End if;
+    ->      if sal >=50000 then
+    ->      select 'A Class';
+    ->      elseif sal>=40000 and sal<50000 then
+    ->      select 'B Class';
+    ->      elseif sal>=30000 and sal<40000 then
+    ->      select 'C Class';
+    ->      elseif sal<30000 then
+    ->      select 'D Class';
+    ->      end if;
+    ->      End loop emp_loop;
+    ->      close c1;
+    ->      end$$
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> call empcursor()$$
++---------+
+| D Class |
++---------+
+| D Class |
++---------+
+1 row in set (0.00 sec)
+
++---------+
+| B Class |
++---------+
+| B Class |
++---------+
+1 row in set (0.00 sec)
+
++---------+
+| B Class |
++---------+
+| B Class |
++---------+
+1 row in set (0.00 sec)
+
++---------+
+| A Class |
++---------+
+| A Class |
++---------+
+1 row in set (0.00 sec)
+
++---------+
+| A Class |
++---------+
+| A Class |
++---------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)
