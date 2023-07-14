@@ -1,0 +1,73 @@
+/*
+BY:ADITYA KUMAR  
+Topic: JOINS
+*/
+
+CREATE TABLE Customers (
+  CustomerID INT PRIMARY KEY,
+  CustomerName VARCHAR(50),
+  ContactNumber VARCHAR(20),
+  Address VARCHAR(100)
+);
+CREATE TABLE Orders (
+  OrderID INT PRIMARY KEY,
+  CustomerID INT,
+  OrderDate DATE,
+  TotalAmount DECIMAL(10, 2),
+  FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+);
+CREATE TABLE Products (
+  ProductID INT PRIMARY KEY,
+  ProductName VARCHAR(100),
+  Price DECIMAL(10, 2)
+);
+CREATE TABLE OrderItems (
+  OrderID INT,
+  ProductID INT,
+  Quantity INT,
+  PRIMARY KEY (OrderID, ProductID),
+  FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
+  FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+);
+INSERT INTO Customers (CustomerID, CustomerName, ContactNumber, Address)
+VALUES (1, 'John Doe', '1234567890', '123 Main St'),
+       (2, 'Jane Smith', '9876543210', '456 Elm St'),
+       (3, 'Robert Johnson', '4567890123', '789 Oak Ave'),
+       (4, 'Emily Davis', '7890123456', '321 Pine St');
+INSERT INTO Orders (OrderID, CustomerID, OrderDate, TotalAmount)
+VALUES (1, 1, '2023-01-01', 100.00),
+       (2, 2, '2023-02-15', 200.00),
+       (3, 3, '2023-03-10', 150.00),
+       (4, 4, '2023-04-05', 300.00);
+INSERT INTO Products (ProductID, ProductName, Price)
+VALUES (1, 'Product A', 10.00),
+       (2, 'Product B', 20.00),
+       (3, 'Product C', 15.00),
+       (4, 'Product D', 25.00);
+INSERT INTO OrderItems (OrderID, ProductID, Quantity)
+VALUES (1, 1, 2),
+       (1, 2, 3),
+       (2, 3, 1),
+       (3, 1, 2),
+       (3, 3, 1),
+       (4, 2, 2),
+       (4, 4, 3);
+SELECT Customers.CustomerID, Customers.CustomerName, Orders.OrderID, Orders.OrderDate
+FROM Customers
+INNER JOIN Orders ON Customers.CustomerID = Orders.CustomerID;
+
+SELECT Orders.OrderID, Orders.OrderDate, OrderItems.ProductID, OrderItems.Quantity
+FROM Orders
+LEFT JOIN OrderItems ON Orders.OrderID = OrderItems.OrderID;
+
+SELECT Products.ProductID, Products.ProductName, OrderItems.OrderID, OrderItems.Quantity
+FROM Products
+RIGHT JOIN OrderItems ON Products.ProductID = OrderItems.ProductID;
+
+
+SELECT Orders.OrderID, Orders.OrderDate, OrderItems.ProductID, OrderItems.Quantity
+FROM Orders
+FULL OUTER JOIN OrderItems ON Orders.OrderID = OrderItems.OrderID;
+
+
+
