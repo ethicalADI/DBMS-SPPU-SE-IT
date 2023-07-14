@@ -1,0 +1,126 @@
+
+/*
+BY:ADITYA KUMAR  
+Topic: TRIGGERS
+*/
+
+CREATE TABLE departments (
+    Did INT PRIMARY KEY,
+    Dname VARCHAR(100),
+    Location VARCHAR(100)
+   
+);
+
+CREATE TABLE Employee (
+    Empid INT PRIMARY KEY,
+    Ename VARCHAR(50),
+    Contactno VARCHAR(20),
+    DOB DATE,
+    DOJ DATE,
+    Salary INT,
+    Did INT
+    
+);
+
+
+
+-- Insert records into Departments table
+INSERT INTO Departments (Did, Dname, Location)
+VALUES (1, 'HR', 'New York'),
+       (2, 'Marketing', 'Los Angeles'),
+       (3, 'Finance', 'Chicago'),
+       (4, 'IT', 'San Francisco'),
+       (5, 'Operations', 'Dallas');
+
+-- Insert records into Employee table
+INSERT INTO Employee (Empid, Ename, Contactno, DOB, DOJ, Salary,Did)
+VALUES (1, 'John Doe', 1234567890, '1990-01-01', '2020-01-01', 25000,1),
+       (2, 'Jane Smith', 9876543210, '1995-02-15', '2021-03-15', 40000,2),
+       (3, 'Mike Johnson', 5555555555, '1988-07-10', '2019-06-01', 45000,3),
+       (4, 'Emily Williams', 9998887777, '1992-11-20', '2022-04-01', 50000,4),
+       (5, 'David Brown', 1112223333, '1997-04-05', '2023-01-15', 55000,5);
+
+
+
+create table empaudit   
+   (empid int,
+    ename varchar(20),
+    contactno varchar(20),
+    salary INT
+  );
+
+//TRIGGER1
+    delimiter $$
+    create trigger trg1
+    before delete on employee
+    for each row
+    begin
+    insert into empaudit values
+    (old.empid,old.ename,old.contactno,old.salary);
+    end 
+    $$
+
+
+ delete from employee where empid=1;
+  $$
+
+
+ select * from employee;
+  $$
+
+
+ select * from empaudit;
+ $$
+
+//TRIGGER2
+    delimiter $$
+    create trigger trg2
+    before update on employee
+    for each row
+    begin
+    if new.salary>55000 then
+    set new.salary=100000;
+    insert into empaudit values
+    (new.empid,new.ename,new.contactno,new.salary);
+     end if;
+    end
+    $$
+
+
+    update employee
+    set salary=59000
+    where empid=2$$
+
+
+ select * from employee
+  $$
+
+ select * from empaudit
+ $$
+
+//ON UPDATE DELETE CASCADE TRIGGERS
+DELIMITER$$
+CREATE TRIGGER delete_cascade_trigger
+AFTER DELETE ON departments
+FOR EACH ROW
+BEGIN
+DELETE FROM employee WHERE did = OLD.did;
+END
+$$
+
+CREATE TRIGGER update_cascade_trigger
+AFTER UPDATE ON departments
+FOR EACH ROW
+BEGIN
+UPDATE employee SET did = NEW.did WHERE did = OLD.did;
+END
+$$
+
+DELIMITER ;
+
+delete  from departments  where did=5;
+
+select *from employee;
+
+select *from departments;
+
