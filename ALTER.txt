@@ -1,0 +1,71 @@
+
+/*
+BY:ADITYA KUMAR  
+Topic: ALTER TABLE
+*/
+
+
+CREATE TABLE departments (
+    Did INT PRIMARY KEY,
+    Dname VARCHAR(100),
+    Location VARCHAR(100)
+   
+);
+
+CREATE TABLE Employee (
+    Empid INT PRIMARY KEY,
+    Ename VARCHAR(10),
+    Contactno VARCHAR(10),
+    DOB DATE,
+    DOJ DATE,
+    Salary INT,
+    Did INT,
+    FOREIGN KEY (Did) REFERENCES Departments(Did) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+
+
+-- Insert records into Departments table
+INSERT INTO Departments (Did, Dname, Location)
+VALUES (1, 'HR', 'New York'),
+       (2, 'Marketing', 'Los Angeles'),
+       (3, 'Finance', 'Chicago'),
+       (4, 'IT', 'San Francisco'),
+       (5, 'Operations', 'Dallas');
+
+-- Insert records into Employee table
+INSERT INTO Employee (Empid, Ename, Contactno, DOB, DOJ, Salary,Did)
+VALUES (1, 'John Doe', 1234567890, '1990-01-01', '2020-01-01', 50000,1),
+       (2, 'Jane Smith', 9876543210, '1995-02-15', '2021-03-15', 60000,2),
+       (3, 'Mike Johnson', 5555555555, '1988-07-10', '2019-06-01', 70000,3),
+       (4, 'Emily Williams', 9998887777, '1992-11-20', '2022-04-01', 55000,4),
+       (5, 'David Brown', 1112223333, '1997-04-05', '2023-01-15', 65000,5);
+
+
+
+ALTER TABLE departments
+ADD COLUMN Dtype varchar(50);
+
+ALTER TABLE employee
+DROP COLUMN Contactno;
+
+ALTER TABLE employee
+MODIFY COLUMN Ename varchar(20);
+
+ALTER TABLE departments
+RENAME COLUMN Dname TO DepartmentName;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
