@@ -1,0 +1,106 @@
+/*
+BY:ADITYA KUMAR  
+Topic: LIBRARY MANAGEMENT
+*/
+
+-- Create Members table
+CREATE TABLE Members (
+  member_id INT PRIMARY KEY,
+  first_name VARCHAR(50),
+  last_name VARCHAR(50),
+  email VARCHAR(100)
+);
+
+
+-- Create Authors table
+CREATE TABLE Authors (
+  author_id INT PRIMARY KEY,
+  author_name VARCHAR(100)
+);
+
+CREATE TABLE Books (
+  book_id INT PRIMARY KEY,
+  book_name VARCHAR(100),
+  quantity INT,
+  price decimal(10,2),
+  author_id INT,
+  FOREIGN KEY (author_id) REFERENCES Authors(author_id)
+);
+-- Create Transactions table
+CREATE TABLE Transactions (
+  transaction_id INT PRIMARY KEY,
+  book_id INT,
+  member_id INT,
+  checkout_date DATE,
+  due_date DATE,
+  FOREIGN KEY (book_id) REFERENCES Books(book_id),
+  FOREIGN KEY (member_id) REFERENCES Members(member_id)
+);
+
+
+-- Insert records into Members table
+INSERT INTO Members (member_id, first_name, last_name, email)
+VALUES
+  (1, 'John', 'Doe', 'john.doe@example.com'),
+  (2, 'Jane', 'Smith', 'jane.smith@example.com'),
+  (3, 'Michael', 'Johnson', 'michael.johnson@example.com'),
+  (4, 'Emily', 'Williams', 'emily.williams@example.com');
+
+
+-- Insert records into Authors table
+INSERT INTO Authors (author_id, author_name)
+VALUES
+  (1, 'Author 1'),
+  (2, 'Author 2'),
+  (3, 'Author 3'),
+  (4, 'Author 4');
+
+
+-- Insert records into Books table
+INSERT INTO Books (book_id, book_name,  quantity,price,author_id)
+VALUES
+  (1, 'Book 1', 1, 5),
+  (2, 'Book 2', 2, 3),
+  (3, 'Book 3', 2, 2),
+  (4, 'Book 4', 3, 7);
+
+-- Insert records into Transactions table
+INSERT INTO Transactions (transaction_id, book_id, member_id, checkout_date, due_date)
+VALUES
+  (1, 1, 1, '2022-01-01', '2022-01-15'),
+  (2, 2, 2, '2022-02-01', '2022-02-15'),
+  (3, 3, 3, '2022-03-01', '2022-03-15'),
+  (4, 4, 4, '2022-04-01', '2022-04-15');
+
+
+
+
+
+SELECT * FROM Transactions WHERE checkout_date= '2022-01-01' or checkout_date='2022-04-01';
+
+SELECT b.book_id, b.title, a.author_name
+FROM Books b
+JOIN Authors a ON b.author_id = a.author_id;
+
+
+SELECT b.title, a.author_name
+FROM Books b
+JOIN Authors a ON b.author_id = a.author_id
+ORDER BY b.title ;
+
+
+SELECT a.author_name,count(b.price) AS c
+FROM Authors a
+JOIN Books b ON a.author_id = b.author_id
+GROUP BY a.author_name
+
+SELECT a.author_name,sum(b.price) AS s
+FROM Authors a
+JOIN Books b ON a.author_id = b.author_id
+GROUP BY a.author_name
+ORDER BY a.author_name;
+
+
+
+
+
