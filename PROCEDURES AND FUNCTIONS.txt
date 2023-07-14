@@ -1,0 +1,112 @@
+/*
+BY:ADITYA KUMAR  
+Topic: PROCEDURES & FUNCTIONS
+*/
+
+mysql> create table employee(empid int,empname varchar(20),salary varchar(10));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into employee values
+    -> (1,'Aditya','25000'),
+    -> (2,'Shubham','40000'),
+    -> (3,'Akash','35000'),
+    -> (4,'Pradeep','50000'),
+    -> (5,'Yogesh','55000');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select *from employee;
++-------+---------+--------+
+| empid | empname | salary |
++-------+---------+--------+
+|     1 | Aditya  | 25000  |
+|     2 | Shubham | 40000  |
+|     3 | Akash   | 35000  |
+|     4 | Pradeep | 50000  |
+|     5 | Yogesh  | 55000  |
++-------+---------+--------+
+5 rows in set (0.00 sec)
+
+mysql> delimiter $$
+ mysql> create procedure assignclasses(id int)
+    -> begin
+    -> declare temp int;
+    -> select salary into temp from employee where empid=id;
+    -> if temp>=50000 then
+    -> select "Class A";
+    -> elseif temp>=40000 and temp<50000 then
+    -> select "Class B";
+    -> elseif temp>=30000 and temp<40000 then
+    -> select "Class C";
+    -> elseif temp<30000 then
+    -> select "Class D";
+    -> end if;
+    -> end $$
+
+mysql> call assignclasses(4);
+    -> $$
++---------+
+| Class A |
++---------+
+| Class A |
++---------+
+1 row in set (0.01 sec)
+mysql> call assignclasses(2);
+    -> $$
++---------+
+| Class B|
++---------+
+| Class B |
++---------+
+1 row in set (0.01 sec)
+
+mysql> call assignclasses(1);
+    -> $$
++---------+
+| Class D |
++---------+
+| Class D |
++---------+
+1 row in set (0.00 sec)
+
+mysql> call assignclasses(3)$$
++---------+
+| Class C |
++---------+
+| Class C|
++---------+
+1 row in set (0.00 sec)
+
+mysql> delimiter $$
+mysql> create function classes(id int)
+    -> returns varchar(20)
+    -> deterministic
+    -> begin
+    -> declare temp varchar(20);
+    -> declare tempsalary int;
+    -> select salary into tempsalary from employee where empid=id;
+    -> if tempsalary>=50000 then
+    -> set temp = "Class A";
+    -> elseif tempsalary>=40000 and tempsalary<50000 then
+    -> set temp="Class B";
+    -> elseif tempsalary>=30000 and tempsalary<40000 then
+    -> set temp="Class C";
+    -> elseif tempsalary<30000 then
+    -> set temp="Class D";
+    -> end if;
+    -> return temp;
+    -> end$$
+Query OK, 0 rows affected (0.00 sec)
+mysql> select empid, empname, salary, classes(empid) from employee;
+    -> $$
++-------+----------+--------+----------------+
+| empid | ename    | salary | classes(empid) |
++-------+----------+--------+----------------+
+|     1 | Aditya   |  25000 | Class D        |
+|     2 | Shubham  |  40000 | Class B        |
+|     3 | Akash    |  35000 | Class C        |
+|     4 | Pradeep  |  50000 | Class A        |
+|     5 | Yogesh   |  55000 | Class A        |
++-------+----------+--------+----------------+
+5 rows in set (0.00 sec)
+
